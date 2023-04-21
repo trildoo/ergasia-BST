@@ -1,0 +1,80 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        /*assuming our tree wants to be like this:
+        -------------------------------------------------------------------------------
+                                                   8
+                                                  / \
+                                                 3   10
+                                                / \   \
+                                               1   6   14
+                                                  / \  /
+                                                 4  7 13
+        --------------------------------------------------------------------------------
+        */
+        Node node1 = new Node(8);
+        Scanner user_input = new Scanner(System.in);
+        int number_to_find;
+        System.out.print("Enter a number to search: ");
+        number_to_find = user_input.nextInt();
+
+        BST bst = new BST();
+        node1 = bst.Add(3,node1);
+        node1 = bst.Add(10,node1);
+        node1.left = bst.Add(1,node1.left);
+        node1.left = bst.Add(6,node1.left);
+        node1.left.right = bst.Add(4,node1.left.right);
+        node1.left.right = bst.Add(7,node1.left.right);
+        node1.right = bst.Add(14,node1.right);
+        node1.right.left = bst.Add(13,node1.right.left);
+
+        bst.Search(number_to_find,node1);
+    }
+}
+//MAIN ENDS HERE
+class Node {
+    int value;
+    Node left;
+    Node right;
+
+    public Node(int value) {
+        this.value = value;
+        this.left = this.right = null;
+    }
+}
+//NODE ENDS HERE
+class BST {
+    Node root = null;
+    int counter_left = 0;
+    int counter_right = 0;
+
+    //add function
+    public Node Add(int value, Node root) {
+        if (root == null) {
+            return new Node(value);
+        } else if (value < root.value) {
+            root.left = Add(value, root.left);
+        } else if (value > root.value) {
+            root.right = Add(value, root.right);
+        }
+        return root;
+    }
+
+    public void Search(int value, Node root) {
+        if (root == null) {
+            System.out.println("Element not found.");
+        } else if (value == root.value) {
+            System.out.println("Found the element at left " + counter_left + " and right " + counter_right);
+        } else if (value < root.value) {
+            counter_left++;
+            Search(value, root.left);
+        } else {
+            counter_right++;
+            Search(value, root.right);
+        }
+    }
+}
+//BST ENDS HERE
